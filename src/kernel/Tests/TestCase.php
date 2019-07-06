@@ -4,7 +4,7 @@ namespace Tests;
 
 abstract class TestCase
 {
-	private $array;	
+	private $array;
 	private $boolean;
 	private $string;
 	private $keys;
@@ -18,14 +18,14 @@ abstract class TestCase
 
 	public function __destruct()
 	{
-		return $this->result();	
+		return $this->result();
 	}
 
 	protected function countTestMethods()
-	{		
+	{
 		$this->trace = debug_backtrace();
 		$method = $this->trace[2]['function'];
-		$this->testMethods[$method] = 1;		
+		$this->testMethods[$method] = 1;
 	}
 
 	protected function json($data)
@@ -48,7 +48,7 @@ abstract class TestCase
 
 	protected function boolean($value)
 	{
-		$this->boolean = $value;	
+		$this->boolean = $value;
 		return $this;
 	}
 
@@ -95,9 +95,7 @@ abstract class TestCase
 	{
 		if ($this->boolean === false) {
 			$this->asserts[] = 1;
-		} else {
-			
-		}
+		} else { }
 
 		return $this;
 	}
@@ -140,7 +138,7 @@ abstract class TestCase
 	protected function notContains($str)
 	{
 		$pos = strpos($this->string, $str);
-		
+
 		if ($pos === false) {
 			$this->asserts[] = 1;
 		} else {
@@ -149,75 +147,76 @@ abstract class TestCase
 
 		return $this;
 	}
-	
+
 	protected function assert()
-	{				
-		$this->countTestMethods();				
+	{
+		$this->countTestMethods();
 
 		foreach ($this->asserts as $key => $value) {
 			if ($value === 1) {
 				$this->success();
-			} 
+			}
 
-			if ($value === 0) {		
-				$this->fail();			
+			if ($value === 0) {
+				$this->fail();
 			}
 
 			unset($this->asserts[$key]);
 		}
 
-		$this->assertCount += 1;	
+		$this->assertCount += 1;
 	}
 
 	private function success()
-	{				
+	{
 		$this->success[] = 1;
 	}
 
 	private function fail()
-	{		
+	{
 		$this->failure[] = 1;
 
 		$assert = $this->trace[1];
-		$test = $this->trace[2];		
+		$test = $this->trace[2];
 
 		$this->failures[] = [
 			'file' => $assert['file'],
 			'line' => $assert['line'],
 			'method' => $test['function'],
-			'class' => $assert['class'] 
-		];		
+			'class' => $assert['class']
+		];
 	}
 
-	private function statistics() : Array
-	{		
+	private function statistics(): array
+	{
 		return [
-			'success' => count((array)$this->success),
-			'failure' => count((array)$this->failure),
+			'success' => count((array) $this->success),
+			'failure' => count((array) $this->failure),
 			'total' => count($this->testMethods),
 			'asserts' => $this->assertCount
-		];		
+		];
 	}
 
 	private function result()
 	{
-		$stats = $this->statistics();			
+		$stats = $this->statistics();
 		$count = cli_format_color("{$stats['total']} test(s)", "light");
 		$asserts = cli_format_color("{$stats['asserts']} assert(s)", "primary");
 		$success = cli_format_color("{$stats['success']} Success", "success");
 		$failure = cli_format_color("{$stats['failure']} Failure(s)", "danger");
-		cli_separator('Initializing avalon test suite', 60);	
-		cli_separator('Test running...', 0);	
-		cli_separator("Test results", 60);				
-		cli_separator("{$count} {$asserts} {$success} {$failure}", 0);	
+		cli_separator('Initializing avalon test suite', 60);
+		cli_separator('Test running...', 0);
+		cli_separator("Test results", 60);
+		cli_separator("{$count} {$asserts} {$success} {$failure}", 0);
 
 		if ($stats['failure'] > 0) {
 			cli_separator('Trace failures', 60);
 
-			foreach ($this->failures as $fail) {				
+			foreach ($this->failures as $fail) {
 				cli_print("Failure in {$fail['class']}::{$fail['method']}(), line {$fail['line']}");
 			}
+
+			exit;
 		}
 	}
-
 }
