@@ -72,7 +72,7 @@ class Builder implements IBuilder
 
 	public function query()
 	{		
-		echo $this->query->innerJoin('users', 'id', 'user_id')->get();
+		//echo $this->query->innerJoin('users', 'id', 'user_id')->get();
 		
 		return $this->query->get();
 	}
