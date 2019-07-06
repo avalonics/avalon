@@ -217,6 +217,8 @@ abstract class TestCase
 			foreach ($this->failures as $fail) {				
 				cli_print("Failure in {$fail['class']}::{$fail['method']}(), line {$fail['line']}");
 			}
+
+			exit;
 		}
 	}
 

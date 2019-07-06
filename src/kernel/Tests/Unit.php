@@ -8,7 +8,7 @@ class Unit implements ITest
 {
 	public function run()
 	{		
-		$path = __TESTS__."Unit\\*.php";
+		$path = __TESTS__."Unit/*.php";
 		$classes = glob($path);
 
 		foreach ($classes as $file) {
